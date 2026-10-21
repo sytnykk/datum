@@ -137,7 +137,7 @@ export default function ButtonPage() {
       </Section>
 
       <Section id="button-states" title="States" intro="Every Figma variant and state, in both themes at once. Hover, pressed and focus are CSS states in code, shown here with a docs-only preview attribute. Size md.">
-        <div className="grid gap-16 xl:grid-cols-2">
+        <div className="grid gap-16">
           <StateGrid theme="light" />
           <StateGrid theme="dark" />
         </div>
@@ -221,7 +221,7 @@ export default function ButtonPage() {
         <Button asChild size="sm" variant="ghost" iconEnd={<ArrowRight />}><a href={SOURCE + 'IconButton.tsx'} target="_blank" rel="noreferrer">Source</a></Button>
       </div>
       <Section id="icon-button-states" title="States" intro="Size md, both themes.">
-        <div className="grid gap-16 xl:grid-cols-2">
+        <div className="grid gap-16">
           <StateGrid theme="light" icon />
           <StateGrid theme="dark" icon />
         </div>

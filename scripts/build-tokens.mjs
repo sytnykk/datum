@@ -217,9 +217,9 @@ const twUtils = raw.textStyles.map((s) => {
 const tw =
   header +
   `/* Import after "tailwindcss" and tokens.css. Class = Figma name: bg/surface → bg-surface, space/12 → p-12, radius/sm → rounded-sm, text style mono/xl → type-mono-xl. */\n` +
-  `@theme {\n  --color-*: initial;\n  --spacing: initial;\n  --spacing-*: initial;\n  --radius-*: initial;\n  --text-*: initial;\n  --font-*: initial;\n  --shadow-*: initial;\n\n` +
+  `@theme inline {\n  --color-*: initial;\n  --spacing: initial;\n  --spacing-*: initial;\n  --radius-*: initial;\n  --text-*: initial;\n  --font-*: initial;\n  --shadow-*: initial;\n\n` +
   `  --font-sans: ${STACK.Geist.map((f) => (f.includes(' ') ? `"${f}"` : f)).join(', ')};\n  --font-mono: ${STACK['Geist Mono'].map((f) => (f.includes(' ') ? `"${f}"` : f)).join(', ')};\n\n` +
-  `  /* Colours: point at tokens.css, so light/dark switch at runtime */\n  --color-transparent: transparent;\n  --color-current: currentColor;\n` +
+  `  /* Colours: point at tokens.css, so light/dark switch at runtime. "inline" makes each class use the token directly\n     (bg-surface → var(--color-bg-surface)), so data-theme on any element re-themes everything inside it. */\n  --color-transparent: transparent;\n  --color-current: currentColor;\n` +
   twColor.join('\n') +
   `\n\n  /* Space, size, radius */\n` +
   twDims.join('\n') +

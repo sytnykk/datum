@@ -1,0 +1,27 @@
+{
+  "name": "datum",
+  "version": "0.1.0",
+  "description": "Datum design system: Figma variables to W3C tokens to CSS and Tailwind, with a live docs site.",
+  "scripts": {
+    "tokens": "node scripts/build-tokens.mjs",
+    "tokens:check": "node scripts/build-tokens.mjs --check",
+    "dev": "vite",
+    "build": "npm run tokens:check && vite build",
+    "preview": "vite preview"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.2",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "geist": "^1.8.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "private": true,
+  "type": "module"
+}

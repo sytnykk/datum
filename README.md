@@ -15,6 +15,7 @@ figma/variables.raw.json      exact export + checksum
   │  npm run tokens  (scripts/build-tokens.mjs: verifies, validates, converts)
   ▼
 tokens/tokens.json            W3C Design Tokens Format 2025.10
+tokens/contrast-report.json   72 WCAG 2.2 AA pairs, light + dark (build fails below AA)
 src/tokens/tokens.css         CSS variables, light + dark
 src/tokens/tailwind-theme.css Tailwind v4 theme
   │  git push → GitHub Actions: re-check tokens, build, deploy

@@ -1,5 +1,8 @@
 // Reads tokens/tokens.json (the W3C file the sync writes) for the docs pages.
 import tokens from '../../tokens/tokens.json';
+import contrastReport from '../../tokens/contrast-report.json';
+
+export const contrast = contrastReport.modes;
 
 export const EXT = 'io.github.sytnykk.datum';
 export const meta = tokens.$extensions[EXT];

@@ -35,6 +35,7 @@ function ThemeSwitch() {
 
 const NAV = [
   { href: '#semantic', label: 'Semantic colours' },
+  { href: '#contrast', label: 'Contrast' },
   { href: '#primitives', label: 'Primitive scales' },
   { href: '#dimensions', label: 'Space, size, radius' },
   { href: '#type', label: 'Text styles' },

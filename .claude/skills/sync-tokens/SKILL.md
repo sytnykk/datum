@@ -21,14 +21,15 @@ Say in one line what each step does before running it.
 3. **Save the export verbatim** to `figma/variables.raw.json`: the returned JSON exactly as returned, one line, nothing added or reformatted.
 4. **Build.** Run `npm run tokens`.
    - `Checksum mismatch` means the copy in step 3 wasn't exact. Re-run steps 2–3. Never hand-edit the raw file to make it pass.
+   - `Contrast: N of 72 pairs fail` means a colour change breaks WCAG 2.2 AA (rules in `scripts/contrast-rules.mjs`). Nothing was written. Show the failing pairs in plain words and stop: the fix is a different colour in Figma, then sync again. Don't weaken a rule to make a sync pass; changing the rules is a design decision for Sasha.
    - Any other error is a real problem in Figma (a semantic token without a dark twin, a missing code syntax, a raw colour where an alias belongs). Show the message, explain it in one line, and stop: the fix belongs in Figma.
 5. **Report the change list** the build prints (`~` changed, `+` added, `-` removed; a changed primitive also lists the semantic tokens that use it), in plain words, e.g. "indigo/600 changed #3345E6 → #2F40DB; bg/accent and focus/ring follow it in light mode".
    - If anything was **removed or renamed**, ask before continuing: components may depend on it.
-   - If a **colour** changed, note that contrast isn't rechecked automatically yet (planned for Stage 5). Flag the known tight pair: text/error on bg/error-subtle in light mode is 4.52:1, minimum 4.5.
+   - If a **colour** changed, report the build's contrast line (all pass, and the closest pair per mode) and any `!` warnings (a subtle fill hard to see on its card; the focus halo no longer matching the ring). Warnings don't block, but say what they mean.
    - If nothing changed, say so and stop.
 6. **Check locally.** `npm run build` must pass.
 7. **Commit and push to main.** Commit message: `Sync tokens from Figma (export <checksum>)` plus the change list in the body. Push: GitHub Actions re-checks the tokens, builds and deploys.
 8. **Confirm it's live.** Watch the "Build and deploy" run until it finishes, then open https://sytnykk.github.io/datum/ and check that the changed token shows its new value on the Tokens page. Report the run result and the live link.
 
 ## What the person should be able to say
-"Figma variables are exported by a read-only plugin script, checked with a checksum, converted to W3C design tokens, and from those to CSS variables and a Tailwind theme. CI rejects token files that don't match the export, then deploys the docs."
+"Figma variables are exported by a read-only plugin script, checked with a checksum, converted to W3C design tokens, and from those to CSS variables and a Tailwind theme. The build checks 72 contrast pairs in both modes and refuses an inaccessible colour. CI rejects token files that don't match the export, then deploys the docs."

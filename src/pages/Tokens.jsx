@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { meta, semantic, primitiveFamilies, dimensions, typography, refName, refColor, hexLabel, target, tailwindClasses, modeColor } from '../lib/tokens.js';
+import { meta, semantic, primitiveFamilies, dimensions, typography, refName, refColor, hexLabel, target, tailwindClasses, modeColor, contrast } from '../lib/tokens.js';
 
 const FIGMA_URL = 'https://www.figma.com/design/qYrAS6I0CwM9veRdhMSb20/Datum---Observability-platform-for-engineering-teams?node-id=5-3';
 const MODES = ['light', 'dark'];
@@ -190,6 +190,61 @@ function TypeStyles() {
   );
 }
 
+/** One ratio, drawn in the pair's real colours for that mode, so the cell proves itself. */
+function RatioCell({ p, mode }) {
+  const fg = modeColor(p.fg, mode);
+  const bg = modeColor(p.bg, mode);
+  const isText = p.fg.startsWith('text/');
+  return (
+    <span className="flex h-control-md items-center gap-6 rounded-sm px-8" style={{ background: bg, boxShadow: `inset 0 0 0 1px ${modeColor('border/default', mode)}` }}
+      title={`${p.fg} on ${p.bg}, ${mode}: ${p.ratio.toFixed(2)}:1, needs ${p.min}:1`}>
+      {!isText && <span className="block h-12 w-12 shrink-0 rounded-sm" style={{ border: `1px solid ${fg}` }} />}
+      <span className="type-mono-sm" style={{ color: isText ? fg : modeColor('text/default', mode) }}>{p.ratio.toFixed(2)}</span>
+      <span className="sr-only">{p.pass ? 'passes' : 'fails'}</span>
+    </span>
+  );
+}
+
+function ContrastPanel({ mode }) {
+  const pairs = contrast[mode];
+  const bases = ['bg/default', 'bg/surface', 'bg/selected'];
+  const fgs = [...new Set(pairs.filter((p) => bases.includes(p.bg)).map((p) => p.fg))];
+  const others = pairs.filter((p) => !bases.includes(p.bg));
+  const passing = pairs.filter((p) => p.pass).length;
+  return (
+    <div className="min-w-0 rounded-md border border-default bg-surface p-16">
+      <h3 className="type-heading-sm text-default">{mode === 'light' ? 'Light' : 'Dark'}</h3>
+      <p className="type-body-xs text-muted">{passing} of {pairs.length} pass</p>
+      <table className="mt-12 w-full border-separate border-spacing-x-0 border-spacing-y-4">
+        <thead>
+          <tr className="type-label-sm text-muted">
+            <th className="pr-8 text-left font-medium" scope="col">Foreground</th>
+            {bases.map((b) => <th key={b} className="pr-4 text-left font-medium" scope="col">on {b.split('/')[1]}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {fgs.map((fg) => (
+            <tr key={fg}>
+              <th scope="row" className="type-label-sm pr-8 text-left font-medium text-default">
+                {fg}<span className="type-body-xs block text-muted">needs {pairs.find((p) => p.fg === fg).min}:1</span>
+              </th>
+              {bases.map((bg) => <td key={bg} className="pr-4"><RatioCell p={pairs.find((p) => p.fg === fg && p.bg === bg)} mode={mode} /></td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <ul className="mt-12 flex flex-col gap-4 border-t border-default pt-12">
+        {others.map((p) => (
+          <li key={p.fg + p.bg} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-8">
+            <span className="type-label-sm text-default">{p.fg} <span className="text-muted">on</span> {p.bg}</span>
+            <RatioCell p={p} mode={mode} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export default function TokensPage() {
   return (
     <article>
@@ -206,6 +261,13 @@ export default function TokensPage() {
       <Section id="semantic" title="Semantic colours"
         intro="What components use. Each one points to a primitive, with a different step in light and dark. The previews show both modes side by side, whatever theme this page is in.">
         <SemanticTable />
+      </Section>
+      <Section id="contrast" title="Contrast"
+        intro="WCAG 2.2 AA, checked on every build: text needs 4.5:1, input borders and the focus ring 3:1. A pair below its minimum stops the build, so it can't reach this page. Each number is drawn in the pair's own colours.">
+        <div className="grid gap-16 lg:grid-cols-2">
+          <ContrastPanel mode="light" />
+          <ContrastPanel mode="dark" />
+        </div>
       </Section>
       <Section id="primitives" title="Primitive scales"
         intro="Raw colour steps. Hidden from the Figma pickers and never used by components directly; semantic tokens point to them.">

@@ -37,7 +37,7 @@ const NAV = [
   { href: '#semantic', label: 'Semantic colours' },
   { href: '#contrast', label: 'Contrast' },
   { href: '#primitives', label: 'Primitive scales' },
-  { href: '#dimensions', label: 'Space, size, radius' },
+  { href: '#dimensions', label: 'Space, size, radius, stroke' },
   { href: '#type', label: 'Text styles' },
 ];
 

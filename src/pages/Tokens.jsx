@@ -125,7 +125,10 @@ function Dimensions() {
   const group = (g) => dimensions.filter((t) => t.x.figma.name.startsWith(g + '/'));
   const cls = (t) => {
     const [g, k] = t.x.figma.name.split('/');
-    return g === 'radius' ? `rounded-${k}` : g === 'size' ? `h-${k}` : `p-${k}, gap-${k}`;
+    if (g === 'radius') return `rounded-${k}`;
+    if (g === 'size') return k.startsWith('icon') ? `size-${k}` : `h-${k}`;
+    if (g === 'stroke') return 'CSS variable only';
+    return `p-${k}, gap-${k}`;
   };
   const Row = ({ t, visual }) => (
     <li className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-8 border-b border-default px-16 py-8 last:border-b-0 md:grid-cols-[160px_160px_160px_minmax(0,1fr)] md:gap-16">
@@ -139,7 +142,8 @@ function Dimensions() {
     <div className="flex flex-col gap-24">
       {[
         ['Space', 'space', (t) => <span className="block h-12 rounded-sm border border-strong bg-selected" style={{ width: t.$value.value || 1 }} />],
-        ['Control size', 'size', (t) => <span className="block w-[96px] rounded-sm border border-strong bg-selected" style={{ height: t.$value.value }} />],
+        ['Size', 'size', (t) => <span className="block rounded-sm border border-strong bg-selected" style={{ height: t.$value.value, width: t.x.figma.name.includes('icon') ? t.$value.value : 96 }} />],
+        ['Stroke', 'stroke', (t) => <span className="block h-control-md w-[64px] rounded-sm bg-surface" style={{ boxShadow: `inset 0 0 0 var(${t.x.css}) var(--color-border-strong)` }} />],
         ['Radius', 'radius', (t) => <span className="block h-control-lg w-[64px] border border-strong bg-selected" style={{ borderRadius: `var(${t.x.css})` }} />],
       ].map(([title, g, visual]) => (
         <div key={g}>
@@ -273,7 +277,7 @@ export default function TokensPage() {
         intro="Raw colour steps. Hidden from the Figma pickers and never used by components directly; semantic tokens point to them.">
         <Primitives />
       </Section>
-      <Section id="dimensions" title="Space, size, radius"
+      <Section id="dimensions" title="Space, size, radius, stroke"
         intro="A curated 4px-based scale. Only these steps exist as Tailwind classes, so p-10 or rounded-lg don't compile.">
         <Dimensions />
       </Section>

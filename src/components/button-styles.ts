@@ -8,7 +8,9 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 export const base = [
   'relative inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-sm',
   'cursor-pointer select-none no-underline transition-colors duration-100 motion-reduce:transition-none',
-  'outline-none focus-ring:focus-ring-button', // 2px ring, 2px gap (decision 4B)
+  // 2px ring, 2px gap (decision 4B). The ring colour is set up front so transition-colors doesn't
+  // fade the outline in from the text colour.
+  'outline-none outline-focus-ring focus-ring:focus-ring-button',
   'touch-target', // 40px tap area on touch screens (decision 6A)
   'is-disabled:cursor-not-allowed',
   'data-loading:cursor-progress',

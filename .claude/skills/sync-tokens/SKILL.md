@@ -22,7 +22,7 @@ Say in one line what each step does before running it.
 4. **Build.** Run `npm run tokens`.
    - `Checksum mismatch` means the copy in step 3 wasn't exact. Re-run steps 2–3. Never hand-edit the raw file to make it pass.
    - Any other error is a real problem in Figma (a semantic token without a dark twin, a missing code syntax, a raw colour where an alias belongs). Show the message, explain it in one line, and stop: the fix belongs in Figma.
-5. **Report the change list** the build prints (`~` changed, `+` added, `-` removed), in plain words, e.g. "indigo/600 changed #3345E6 → #2F40DB; bg/accent and focus/ring follow it in light mode".
+5. **Report the change list** the build prints (`~` changed, `+` added, `-` removed; a changed primitive also lists the semantic tokens that use it), in plain words, e.g. "indigo/600 changed #3345E6 → #2F40DB; bg/accent and focus/ring follow it in light mode".
    - If anything was **removed or renamed**, ask before continuing: components may depend on it.
    - If a **colour** changed, note that contrast isn't rechecked automatically yet (planned for Stage 5). Flag the known tight pair: text/error on bg/error-subtle in light mode is 4.52:1, minimum 4.5.
    - If nothing changed, say so and stop.

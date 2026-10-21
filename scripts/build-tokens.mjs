@@ -237,10 +237,20 @@ const after = new Map(flatten(tokensJson));
 const changes = [];
 for (const [k, t] of after) if (!before.has(k)) changes.push(`+ ${k} ${show(t)}`); else if (show(before.get(k)) !== show(t)) changes.push(`~ ${k}: ${show(before.get(k))} → ${show(t)}`);
 for (const k of before.keys()) if (!after.has(k)) changes.push(`- ${k}`);
+// A changed primitive changes every semantic token that points to it: list those too.
+for (const c of [...changes]) {
+  const m = c.match(/^~ (\S+):/);
+  if (!m || !prim.has(m[1])) continue;
+  const users = light.variables.flatMap((v) => [
+    v.values[light.modes[0]].alias === m[1] ? `${v.name} (light)` : null,
+    darkByName.get(v.name).values[dark.modes[0]].alias === m[1] ? `${v.name} (dark)` : null,
+  ]).filter(Boolean);
+  if (users.length) changes.splice(changes.indexOf(c) + 1, 0, `    used by ${users.join(', ')}`);
+}
 
 const counts = `${primitives.variables.length} primitives, ${light.variables.length} semantic (light + dark), ${dims.variables.length} dimensions, ${raw.textStyles.length} text styles`;
 console.log(`✓ Figma export verified (checksum ${raw.checksum}): ${counts}.`);
-console.log(before.size === 0 ? '  First build.' : changes.length ? `  ${changes.length} change(s):\n` + changes.map((c) => '    ' + c).join('\n') : '  No token changes.');
+console.log(before.size === 0 ? '  First build.' : changes.length ? `  ${changes.filter((c) => !c.startsWith(" ")).length} change(s):\n` + changes.map((c) => '    ' + c).join('\n') : '  No token changes.');
 
 if (CHECK_ONLY) process.exit(0);
 fs.mkdirSync(path.dirname(OUT_JSON), { recursive: true });

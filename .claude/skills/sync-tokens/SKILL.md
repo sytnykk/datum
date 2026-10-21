@@ -25,9 +25,9 @@ Say in one line what each step does before running it.
    - Any other error is a real problem in Figma (a semantic token without a dark twin, a missing code syntax, a raw colour where an alias belongs). Show the message, explain it in one line, and stop: the fix belongs in Figma.
 5. **Report the change list** the build prints (`~` changed, `+` added, `-` removed; a changed primitive also lists the semantic tokens that use it), in plain words, e.g. "indigo/600 changed #3345E6 → #2F40DB; bg/accent and focus/ring follow it in light mode".
    - If anything was **removed or renamed**, ask before continuing: components may depend on it.
-   - If a **colour** changed, report the build's contrast line (all pass, and the closest pair per mode) and any `!` warnings (a subtle fill hard to see on its card; the focus halo no longer matching the ring). Warnings don't block, but say what they mean.
+   - If a **colour** changed, report the build's contrast line (all pass, and the closest pair per mode) and any `!` warnings (a subtle fill or hover fill hard to see on what it sits on; the focus halo no longer matching the ring; disabled text outside 2–3.5:1). Warnings don't block, but say what they mean.
    - If nothing changed, say so and stop.
-6. **Check locally.** `npm run build` must pass. It also type-checks the components, so a token rename that breaks a component class shows up here.
+6. **Check locally.** `npm run build` must pass (it also type-checks the components). It does **not** catch a removed or renamed token that a component uses: Tailwind silently skips class names it doesn't know. That's why step 5 asks before removals; if one goes ahead, search `src/components` for the old class name (e.g. `bg-hover`).
 7. **Commit and push to main.** Commit message: `Sync tokens from Figma (export <checksum>)` plus the change list in the body. Push: GitHub Actions re-checks the tokens, builds and deploys.
 8. **Confirm it's live.** Watch the "Build and deploy" run until it finishes, then open https://sytnykk.github.io/datum/ and check that the changed token shows its new value on the Tokens page. Report the run result and the live link.
 

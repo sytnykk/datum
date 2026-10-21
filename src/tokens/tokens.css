@@ -196,8 +196,40 @@
   --color-text-error-strong: var(--red-800);
 }
 
-/* Semantic, dark (Figma: Semantic Dark). Follows the OS unless the page sets data-theme. */
-:root[data-theme="dark"] {
+/* Semantic, dark (Figma: Semantic Dark). Follows the OS unless the page sets data-theme.
+   data-theme also works on any element, so a light panel can sit inside a dark page and vice versa. */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-bg-default: var(--slate-0);
+  --color-bg-surface: var(--slate-25);
+  --color-bg-selected: var(--slate-50);
+  --color-bg-accent: var(--indigo-600);
+  --color-bg-success-subtle: var(--green-100);
+  --color-bg-warning-subtle: var(--amber-100);
+  --color-bg-error-subtle: var(--red-100);
+  --color-bg-info-subtle: var(--sky-100);
+  --color-text-default: var(--slate-900);
+  --color-text-muted: var(--slate-600);
+  --color-text-on-accent: var(--slate-0);
+  --color-text-accent: var(--indigo-700);
+  --color-text-success: var(--green-700);
+  --color-text-warning: var(--amber-700);
+  --color-text-error: var(--red-700);
+  --color-text-info: var(--sky-700);
+  --color-border-default: var(--slate-100);
+  --color-border-strong: var(--slate-500);
+  --color-focus-ring: var(--indigo-600);
+  --color-focus-halo: var(--indigo-600-a20);
+  --color-bg-accent-hover: var(--indigo-700);
+  --color-bg-accent-pressed: var(--indigo-800);
+  --color-bg-hover: var(--slate-50);
+  --color-bg-pressed: var(--slate-100);
+  --color-bg-error-pressed: var(--red-200);
+  --color-bg-disabled: var(--slate-50);
+  --color-text-disabled: var(--slate-400);
+  --color-text-error-strong: var(--red-800);
+}
+:root[data-theme="dark"], [data-theme="dark"] {
   color-scheme: dark;
   --color-bg-default: var(--slate-950);
   --color-bg-surface: var(--slate-900);

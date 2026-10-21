@@ -184,8 +184,10 @@ const css =
   typeLines.join('\n') +
   `\n\n  /* Semantic, light (Figma: Semantic) */\n  color-scheme: light;\n` +
   lightLines.join('\n') +
-  `\n}\n\n/* Semantic, dark (Figma: Semantic Dark). Follows the OS unless the page sets data-theme. */\n` +
-  `:root[data-theme="dark"] {\n  color-scheme: dark;\n${darkLines.join('\n')}\n}\n` +
+  `\n}\n\n/* Semantic, dark (Figma: Semantic Dark). Follows the OS unless the page sets data-theme.\n` +
+  `   data-theme also works on any element, so a light panel can sit inside a dark page and vice versa. */\n` +
+  `[data-theme="light"] {\n  color-scheme: light;\n${lightLines.join('\n')}\n}\n` +
+  `:root[data-theme="dark"], [data-theme="dark"] {\n  color-scheme: dark;\n${darkLines.join('\n')}\n}\n` +
   `@media (prefers-color-scheme: dark) {\n  :root:not([data-theme="light"]) {\n    color-scheme: dark;\n${darkLines.map((l) => '  ' + l).join('\n')}\n  }\n}\n`;
 
 // ---------- 5. Tailwind v4 theme ----------

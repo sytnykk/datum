@@ -1,0 +1,15 @@
+{
+  // Type-checks the components (src/components). The docs pages stay plain JSX.
+  // Run: npm run typecheck (part of npm run build, so CI fails on a type error).
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": ["vite/client"]
+  },
+  "include": ["src/components"]
+}

@@ -2,6 +2,7 @@
 @import "../tokens/tokens.css";
 @import "../tokens/tailwind-theme.css";
 @import "../tokens/docs-safelist.css";
+@import "../components/components.css";
 
 @font-face {
   font-family: "Geist";

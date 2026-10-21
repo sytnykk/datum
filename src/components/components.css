@@ -1,0 +1,49 @@
+/* Datum component styles that Tailwind classes can't express on their own.
+   Import after the token CSS. Everything here uses token variables; no raw values. */
+
+/* Interaction states as variants, so a component writes `can-hover:bg-hover` once and it:
+   - only applies when the control can actually be used (not disabled, not aria-disabled, not loading),
+   - doesn't stick on touch screens (hover only where the pointer can hover),
+   - can be forced on the docs page with data-preview="hover|pressed|focus" (docs only, not public API). */
+@custom-variant can-hover {
+  @media (hover: hover) {
+    &:hover:not(:disabled, [aria-disabled="true"], [data-loading]) { @slot; }
+  }
+  &[data-preview="hover"] { @slot; }
+}
+@custom-variant can-press {
+  &:active:not(:disabled, [aria-disabled="true"], [data-loading]) { @slot; }
+  &[data-preview="pressed"] { @slot; }
+}
+@custom-variant focus-ring {
+  &:focus-visible { @slot; }
+  &[data-preview="focus"] { @slot; }
+}
+@custom-variant is-disabled {
+  &:disabled, &[aria-disabled="true"] { @slot; }
+}
+
+/* Focus ring for buttons (Stage 3, decision 4B): 2px focus/ring, 2px gap, no halo.
+   Uses outline, so it also shows in Windows high-contrast mode. Overrides the page-wide
+   :focus-visible style (1px ring + halo), which inputs keep. */
+@utility focus-ring-button {
+  outline: var(--stroke-focus) solid var(--color-focus-ring);
+  outline-offset: var(--space-2);
+  box-shadow: none;
+}
+
+/* Touch target (Stage 3, decision 6A): on touch screens the control keeps its size,
+   but its tappable area grows to at least size/control-lg (40px). Needs position: relative. */
+@utility touch-target {
+  @media (pointer: coarse) {
+    &::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      translate: -50% -50%;
+      width: max(100%, var(--size-control-lg));
+      height: max(100%, var(--size-control-lg));
+    }
+  }
+}
